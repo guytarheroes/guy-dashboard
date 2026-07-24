@@ -28,19 +28,28 @@ image ที่ได้ ~28MB (nginx:alpine + static files ล้วน ไม�
 
 ### ผูกกับ guytarheroes.com
 
-Pi อยู่หลังเราเตอร์บ้าน ไม่มี public IP เลยไม่เปิด port ออกเน็ต — ให้ Cloudflare Tunnel ที่รันอยู่แล้ว
-(ตัวเดียวกับที่ใช้ SSH) เป็นทางเข้าเดียว
+Pi อยู่หลังเราเตอร์บ้าน ไม่มี public IP เลยไม่เปิด port ออกเน็ต เส้นทางที่มีอยู่แล้วคือ
 
-Cloudflare Zero Trust → Networks → Tunnels → เลือก tunnel เดิม → **Public Hostnames** → Add:
+```
+Cloudflare edge → cloudflared (tunnel) → Nginx Proxy Manager → guytarheroes-web:80
+```
 
-| | |
+tunnel และ route ของ `guytarheroes.com` **ตั้งไว้อยู่แล้ว** ไม่ต้องสร้างใหม่ — ที่ขาดคือ proxy host ใน NPM
+
+NPM admin → **Hosts → Proxy Hosts → Add Proxy Host**
+
+| ช่อง | ค่า |
 |---|---|
-| Subdomain | (เว้นว่าง) |
-| Domain | `guytarheroes.com` |
-| Service | `HTTP` → `guytarheroes-web:80` |
+| Domain Names | `guytarheroes.com`, `www.guytarheroes.com` |
+| Scheme | `http` |
+| Forward Hostname / IP | `guytarheroes-web` |
+| Forward Port | `80` |
+| Block Common Exploits | เปิด |
 
-`cloudflared` บนเครื่องนี้รันเป็น container (`cloudflared_tunnel_1`, `cloudflared_tunnel_2`) อยู่บน network
-`server_default` — `docker-compose.yml` เลยต่อ `web` เข้า network นั้นเป็น external เพื่อให้เรียกกันด้วยชื่อ container ได้
+ไม่ต้องออก cert ในแท็บ SSL — TLS จบที่ Cloudflare แล้ว ช่วงนี้เป็นวงในทั้งหมด
+
+ทุก container (`cloudflared_tunnel_1/2`, NPM, `guytarheroes-web`) อยู่ network `server_default`
+จึงเรียกกันด้วยชื่อ container ได้ตรง ๆ — `docker-compose.yml` เลยประกาศ network นั้นเป็น `external`
 
 TLS จบที่ Cloudflare ไม่ต้องทำ cert ที่ origin
 

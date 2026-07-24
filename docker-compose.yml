@@ -6,14 +6,10 @@ services:
     container_name: guytarheroes-web
     restart: unless-stopped
 
-    # อยู่ network เดียวกับ cloudflared_tunnel_1/2 เพื่อให้ tunnel เรียก http://guytarheroes-web:80 ได้
+    # ไม่ publish port ออก host เลย — nginx_proxy_manager คุยผ่าน network นี้ตรง ๆ
+    # เช็คว่าเสิร์ฟอยู่ไหมด้วย: docker exec nginx_proxy_manager curl -sI http://guytarheroes-web/
     networks:
       - server_default
-
-    # loopback อย่างเดียว — ไว้ curl เช็คว่า container เสิร์ฟอยู่จริงไหม
-    # แยกให้ออกว่าพังที่ container หรือพังที่ tunnel เวลาเว็บไม่ขึ้น
-    ports:
-      - "127.0.0.1:8080:80"
 
 networks:
   server_default:
