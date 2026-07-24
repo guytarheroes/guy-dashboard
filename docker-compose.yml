@@ -5,14 +5,16 @@ services:
       dockerfile: apps/web/Dockerfile
     container_name: guytarheroes-web
     restart: unless-stopped
-    # ผูกกับ 127.0.0.1 เท่านั้น — เครื่องอื่นในวง LAN และอินเทอร์เน็ตเข้าไม่ถึง
-    # ให้ Cloudflare Tunnel เป็นทางเข้าเดียว
+
+    # อยู่ network เดียวกับ cloudflared_tunnel_1/2 เพื่อให้ tunnel เรียก http://guytarheroes-web:80 ได้
+    networks:
+      - server_default
+
+    # loopback อย่างเดียว — ไว้ curl เช็คว่า container เสิร์ฟอยู่จริงไหม
+    # แยกให้ออกว่าพังที่ container หรือพังที่ tunnel เวลาเว็บไม่ขึ้น
     ports:
       - "127.0.0.1:8080:80"
 
-    # ถ้า cloudflared รันเป็น container: ลบ ports: ข้างบนออก แล้วเปิด 3 บรรทัดนี้แทน
-    # หาชื่อ network ด้วย: docker inspect <cloudflared> -f '{{range $k,$v := .NetworkSettings.Networks}}{{$k}}{{end}}'
-    # networks: [tunnel]
-# networks:
-#   tunnel:
-#     external: true
+networks:
+  server_default:
+    external: true # สร้างโดย compose ของ cloudflared ไม่ใช่ของ repo นี้

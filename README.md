@@ -37,12 +37,10 @@ Cloudflare Zero Trust → Networks → Tunnels → เลือก tunnel เด
 |---|---|
 | Subdomain | (เว้นว่าง) |
 | Domain | `guytarheroes.com` |
-| Service | `HTTP` → `localhost:8080` |
+| Service | `HTTP` → `guytarheroes-web:80` |
 
-> ถ้า `cloudflared` รันเป็น **container** จะเรียก `localhost:8080` ไม่ถึง host — ให้แก้ `docker-compose.yml`
-> เอา `ports:` ออกแล้วต่อ network เดียวกับ cloudflared ตามคอมเมนต์ในไฟล์ จากนั้นชี้ service เป็น `http://web:80`
->
-> เช็คว่ารันแบบไหน: `docker ps --filter name=cloudflared`
+`cloudflared` บนเครื่องนี้รันเป็น container (`cloudflared_tunnel_1`, `cloudflared_tunnel_2`) อยู่บน network
+`server_default` — `docker-compose.yml` เลยต่อ `web` เข้า network นั้นเป็น external เพื่อให้เรียกกันด้วยชื่อ container ได้
 
 TLS จบที่ Cloudflare ไม่ต้องทำ cert ที่ origin
 
