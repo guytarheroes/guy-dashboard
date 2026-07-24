@@ -20,12 +20,13 @@ jobs:
         uses: actions/setup-node@v4 # หรือ actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm' # ช่วยให้ติดตั้งแพ็กเกจรอบถัดๆ ไปไวขึ้น
 
       # Step 3: ติดตั้ง Dependencies
       - name: Install dependencies
+        working-directory: ./my-app
         run: npm ci
 
       # Step 4: ลองสั่ง Build โค้ดดูว่ามี Error ไหม
       - name: Build project
+        working-directory: ./my-app
         run: npm run build
