@@ -30,3 +30,15 @@ jobs:
       - name: Build project
         working-directory: ./my-app
         run: npm run build
+
+      # step นี้จะรันก็ต่อเมื่อ step ข้างบนผ่านหมด (พฤติกรรม default ของ Actions)
+      # ส่งค่าผ่าน env ไม่ใช่แปะ ${{ }} ลงใน shell ตรงๆ กัน script injection
+      - name: Notify Discord
+        env:
+          WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.ref_name }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          jq -n --arg msg "✅ build ผ่าน — $REPO ($BRANCH) $RUN_URL" '{content: $msg}' \
+            | curl -sf -H 'Content-Type: application/json' -d @- "$WEBHOOK"
