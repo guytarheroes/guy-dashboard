@@ -1,0 +1,64 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {/* ต้อง inline และมาก่อน CSS: ถ้า JS ปิดอยู่ .js จะไม่ถูกใส่ แล้ว .reveal จะไม่ซ่อนเนื้อหา */}
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
+  </head>
+
+  <body>
+    <slot />
+
+    <script>
+      // scroll reveal — ราคาถูกกว่า scroll listener เพราะ browser จัดการ intersection ให้
+      const revealables = document.querySelectorAll<HTMLElement>(".reveal");
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.classList.add("is-visible");
+            io.unobserve(entry.target); // เล่นครั้งเดียวพอ
+          }
+        },
+        { rootMargin: "0px 0px -12% 0px" },
+      );
+      revealables.forEach((el) => io.observe(el));
+
+      // nav เปลี่ยนเป็นทึบเมื่อ sentinel บนสุดเลื่อนพ้นจอ
+      const sentinel = document.getElementById("top-sentinel");
+      const nav = document.getElementById("site-nav");
+      if (sentinel && nav) {
+        new IntersectionObserver(
+          ([entry]) => nav.classList.toggle("is-stuck", !entry.isIntersecting),
+          { threshold: 0 },
+        ).observe(sentinel);
+      }
+    </script>
+  </body>
+</html>

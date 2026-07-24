@@ -1,0 +1,95 @@
+---
+import { Image } from "astro:assets";
+import kyoto from "../assets/kyoto.jpg";
+import santorini from "../assets/santorini.jpg";
+import dolomites from "../assets/dolomites.jpg";
+
+const places = [
+  {
+    image: kyoto,
+    alt: "Two people in kimono walking a lantern-lit lane toward Yasaka Pagoda, Kyoto",
+    name: "Kyoto",
+    country: "Japan",
+    note: "Temple mornings before the crowds, back lanes after dark.",
+    nights: "7 nights",
+  },
+  {
+    image: santorini,
+    alt: "Whitewashed steps descending between cliff houses toward the Aegean, Santorini",
+    name: "Santorini",
+    country: "Greece",
+    note: "A house on the caldera and nowhere in particular to be.",
+    nights: "5 nights",
+  },
+  {
+    image: dolomites,
+    alt: "View from a wooden rowing boat across the green water of Lago di Braies",
+    name: "Dolomites",
+    country: "Italy",
+    note: "Still water, hard peaks, and no signal for a week.",
+    nights: "6 nights",
+  },
+];
+---
+
+<section id="destinations" class="mx-auto max-w-6xl px-6 py-28 sm:py-36">
+  <div class="reveal flex flex-wrap items-end justify-between gap-6">
+    <h2 class="font-display max-w-md text-4xl leading-tight sm:text-5xl">
+      Three places, <span class="italic">properly</span>
+    </h2>
+    <p class="text-muted max-w-xs text-sm">
+      We run each trip twice a year. That is the whole catalogue.
+    </p>
+  </div>
+
+  <ul class="mt-16 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      places.map((place, i) => (
+        <li class="reveal card" style={`--d:${i * 120}ms`}>
+          <a href="#plan" class="group block">
+            <div class="frame relative overflow-hidden rounded-lg">
+              <Image
+                src={place.image}
+                alt={place.alt}
+                widths={[420, 700, 1000]}
+                sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
+                class="h-full w-full object-cover"
+              />
+              <span class="badge absolute top-4 left-4 rounded-full px-3 py-1 text-xs">
+                {place.nights}
+              </span>
+            </div>
+
+            <div class="mt-5 flex items-baseline justify-between gap-4">
+              <h3 class="font-display text-2xl">{place.name}</h3>
+              <span class="text-muted text-xs tracking-[0.16em] uppercase">{place.country}</span>
+            </div>
+            <p class="text-muted mt-2 text-sm leading-relaxed">{place.note}</p>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .frame {
+    aspect-ratio: 4 / 5;
+    background: var(--line);
+  }
+
+  .frame :global(img) {
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card:hover .frame :global(img),
+  .card a:focus-visible .frame :global(img) {
+    transform: scale(1.06);
+  }
+
+  .badge {
+    background: color-mix(in srgb, var(--canvas) 88%, transparent);
+    color: var(--ink);
+    backdrop-filter: blur(8px);
+  }
+</style>

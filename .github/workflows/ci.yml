@@ -21,15 +21,15 @@ jobs:
         with:
           node-version: "22"
 
-      # ponytail: ยังไม่มีแอปใน my-app/ — ข้าม 2 step นี้ไปก่อน
-      # พอ commit my-app/package.json เมื่อไหร่ มันจะเริ่มรันเอง ไม่ต้องแก้ไฟล์นี้อีก
       - name: Install dependencies
-        working-directory: ./my-app
         run: npm ci
 
       - name: Build project
-        working-directory: ./my-app
         run: npm run build
+
+      # runner เป็น amd64 คนละ arch กับ Pi — build ทิ้งเพื่อจับ Dockerfile พังเท่านั้น ไม่ push
+      - name: Build Docker image
+        run: docker build -f apps/web/Dockerfile -t guytarheroes-web:ci .
 
       # step นี้จะรันก็ต่อเมื่อ step ข้างบนผ่านหมด (พฤติกรรม default ของ Actions)
       # ส่งค่าผ่าน env ไม่ใช่แปะ ${{ }} ลงใน shell ตรงๆ กัน script injection

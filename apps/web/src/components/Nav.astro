@@ -1,0 +1,105 @@
+---
+const links = [
+  { href: "#destinations", label: "Destinations" },
+  { href: "#approach", label: "Approach" },
+];
+---
+
+{/* sentinel: nav ดูจากตัวนี้ว่าเลื่อนพ้นหัวหน้าหรือยัง จะได้ไม่ต้องผูก scroll listener */}
+<div id="top-sentinel" aria-hidden="true"></div>
+
+<header id="site-nav" class="site-nav">
+  <a href="#main" class="skip">Skip to content</a>
+
+  <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5" aria-label="Main">
+    <a href="/" class="brand font-display text-xl tracking-[0.2em]">WANDER</a>
+
+    <div class="flex items-center gap-7">
+      {
+        links.map((link) => (
+          <a href={link.href} class="nav-link underline-sweep hidden text-sm sm:block">
+            {link.label}
+          </a>
+        ))
+      }
+      <a href="#plan" class="cta rounded-full px-5 py-2 text-sm font-medium">Plan a trip</a>
+    </div>
+  </nav>
+</header>
+
+<style>
+  #top-sentinel {
+    position: absolute;
+    inset-block-start: 0;
+    inline-size: 100%;
+    block-size: 4px;
+  }
+
+  .site-nav {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-start: 0;
+    z-index: 50;
+    color: #fff;
+    transition:
+      background-color 0.5s ease,
+      box-shadow 0.5s ease,
+      color 0.5s ease;
+  }
+
+  /* ทับหน้า hero: โปร่งใส ตัวอักษรขาว */
+  .site-nav.is-stuck {
+    background-color: color-mix(in srgb, var(--canvas) 82%, transparent);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 1px 0 var(--line);
+    color: var(--ink);
+  }
+
+  .brand {
+    font-weight: 500;
+  }
+
+  .nav-link {
+    opacity: 0.85;
+  }
+
+  .nav-link:hover {
+    opacity: 1;
+  }
+
+  .cta {
+    background: #fff;
+    color: #16150f;
+    transition:
+      background-color 0.4s ease,
+      color 0.4s ease,
+      transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .cta:hover {
+    transform: translateY(-2px);
+  }
+
+  .site-nav.is-stuck .cta {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  /* ลิงก์ข้ามไปเนื้อหา: ซ่อนจนกว่าจะโฟกัสด้วยคีย์บอร์ด */
+  .skip {
+    position: absolute;
+    inset-inline-start: 1rem;
+    inset-block-start: -4rem;
+    z-index: 60;
+    border-radius: 0.5rem;
+    background: var(--accent);
+    color: var(--on-accent);
+    padding: 0.6rem 1rem;
+    font-size: 0.875rem;
+    transition: inset-block-start 0.3s ease;
+  }
+
+  .skip:focus {
+    inset-block-start: 1rem;
+  }
+</style>

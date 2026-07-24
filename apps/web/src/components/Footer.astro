@@ -1,0 +1,43 @@
+---
+const year = new Date().getFullYear();
+---
+
+<section id="plan" class="mx-auto max-w-6xl px-6 py-32 text-center sm:py-40">
+  <h2 class="reveal font-display mx-auto max-w-2xl text-4xl leading-[1.15] sm:text-6xl">
+    Next departure is <span class="italic">March</span>
+  </h2>
+  <p class="reveal text-muted mx-auto mt-6 max-w-md text-lg" style="--d:120ms">
+    Eight seats, three destinations. Tell us which one and we will send the itinerary.
+  </p>
+  <a
+    href="mailto:hello@guytarheroes.com?subject=Trip%20enquiry"
+    class="reveal book mt-10 inline-block rounded-full px-8 py-4 text-sm font-medium"
+    style="--d:240ms"
+  >
+    hello@guytarheroes.com
+  </a>
+</section>
+
+<footer class="border-line border-t">
+  <div
+    class="text-muted mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-8 text-sm"
+  >
+    <span class="font-display tracking-[0.2em]">WANDER</span>
+    <span>&copy; {year} guytarheroes.com</span>
+  </div>
+</footer>
+
+<style>
+  .book {
+    background: var(--accent);
+    color: var(--on-accent);
+    transition:
+      transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.4s ease;
+  }
+
+  .book:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+</style>

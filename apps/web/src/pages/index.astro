@@ -1,0 +1,21 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import Destinations from "../components/Destinations.astro";
+import Features from "../components/Features.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Base
+  title="Wander — small-group journeys, taken slowly"
+  description="Eight travellers, one local host, and an itinerary with room to breathe. Kyoto, Santorini and the Dolomites."
+>
+  <Nav />
+  <main id="main">
+    <Hero />
+    <Destinations />
+    <Features />
+    <Footer />
+  </main>
+</Base>
