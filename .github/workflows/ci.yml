@@ -17,7 +17,7 @@ jobs:
 
       # Step 2: ติดตั้ง Node.js ในเครื่องจำลอง
       - name: Setup Node.js
-        uses: actions/coordinator/setup-node@v4 # หรือ actions/setup-node@v4
+        uses: actions/setup-node@v4 # หรือ actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm' # ช่วยให้ติดตั้งแพ็กเกจรอบถัดๆ ไปไวขึ้น
