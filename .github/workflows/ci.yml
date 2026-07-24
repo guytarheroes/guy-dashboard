@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "dev" ]
+    branches: ["main", "dev"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build-and-test:
@@ -19,14 +19,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4 # หรือ actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
 
-      # Step 3: ติดตั้ง Dependencies
+      # ponytail: ยังไม่มีแอปใน my-app/ — ข้าม 2 step นี้ไปก่อน
+      # พอ commit my-app/package.json เมื่อไหร่ มันจะเริ่มรันเอง ไม่ต้องแก้ไฟล์นี้อีก
       - name: Install dependencies
         working-directory: ./my-app
         run: npm ci
 
-      # Step 4: ลองสั่ง Build โค้ดดูว่ามี Error ไหม
       - name: Build project
         working-directory: ./my-app
         run: npm run build
